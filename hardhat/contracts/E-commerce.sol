@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
-import "hardhat/console.sol";
 
 contract E_commerce {
     address public owner;
@@ -62,17 +61,10 @@ contract E_commerce {
     }
 
     function buy(string memory name, address reciverAdress) public payable {
-        /* if (reciverAdress==items[Name].deployerAddress){
-            console.log("yay");
-        }else {
-            console.log("booo");
-        } */
         require(
             items[name].deployerAddress == reciverAdress,
             "Item with the given name does not exist"
         );
-        console.log(items[name].cost);
-        console.log(msg.value);
         require(items[name].cost == msg.value, "missing some eth");
         (bool callSeccess, ) = payable(reciverAdress).call{value: msg.value}(
             ""
