@@ -167,6 +167,32 @@ getBroughtItemsBtn.addEventListener("click", async function getBoughtItems() {
   }
 });
 
+buy.addEventListener("click", async function insertItem() {
+  const testName = document.getElementById("testName").value;
+  const testPublicKey = document.getElementById("testPublicKey").value;
+  const testPrice = document.getElementById("testPrice").value;
+
+  console.log("buying item name " + testName + " with price: " + testPublicKey);
+
+  if (window.ethereum) {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    try {
+      const transactionResponse = await contract.buy(testName, testPublicKey, {
+        value: ethers.parseEther(testPrice),
+      });
+      await transactionResponse.wait(1);
+
+      await listenForTransactionMine(transactionResponse, provider);
+      console.log("Done");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
+
+
 function listenForTransactionMine(transactionResponse, provider) {
   console.log("------------MINING: " + transactionResponse.hash);
   return new Promise((resolve, reject) => {
