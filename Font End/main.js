@@ -45,9 +45,6 @@ addItemBtn.addEventListener("click", async function insertItem() {
   }
 });
 
-
-
-
 // Inside the getAllItemsBtn event listener
 getAllItemsBtn.addEventListener("click", async function getAllItems() {
   if (window.ethereum) {
@@ -89,17 +86,17 @@ getAllItemsBtn.addEventListener("click", async function getAllItems() {
 });
 
 // Inside the getMyItemsBtn event listener
-getMyItemsBtn.addEventListener("click", async function() {
+getMyItemsBtn.addEventListener("click", async function () {
   if (window.ethereum) {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     const contract = new ethers.Contract(contractAddress, abi, signer);
 
     try {
-      const transactionResponse = await contract.getMyItems(signer);
+      const transactionResponse = await contract.getUserItemList(signer);
 
       // Clear previous items
-      const myItemsContainer = document.getElementById("myItemsContainer");
+      const myItemsContainer = document.getElementById("userItemsContainer");
       myItemsContainer.innerHTML = "";
 
       for (let i = 0; i < transactionResponse.length; i++) {
@@ -139,7 +136,9 @@ getBroughtItemsBtn.addEventListener("click", async function getBoughtItems() {
       const transactionResponse = await contract.getUserbroughtItems(signer);
 
       // Clear previous bought items
-      const boughtItemsContainer = document.getElementById("boughtItemsContainer");
+      const boughtItemsContainer = document.getElementById(
+        "boughtItemsContainer"
+      );
       boughtItemsContainer.innerHTML = "";
 
       for (let i = 0; i < transactionResponse.length; i++) {
@@ -168,8 +167,6 @@ getBroughtItemsBtn.addEventListener("click", async function getBoughtItems() {
   }
 });
 
-
-
 function listenForTransactionMine(transactionResponse, provider) {
   console.log("------------MINING: " + transactionResponse.hash);
   return new Promise((resolve, reject) => {
@@ -180,10 +177,3 @@ function listenForTransactionMine(transactionResponse, provider) {
     });
   });
 }
-
-
-
-
-
-
-
