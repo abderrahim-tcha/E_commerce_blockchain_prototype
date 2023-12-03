@@ -45,19 +45,42 @@ addItemBtn.addEventListener("click", async function insertItem() {
   }
 });
 
-getMyItemsBtn.addEventListener("click", async function getBalance() {
+
+
+
+// Inside the getAllItemsBtn event listener
+getAllItemsBtn.addEventListener("click", async function getAllItems() {
   if (window.ethereum) {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
-
     const contract = new ethers.Contract(contractAddress, abi, signer);
+
     try {
-      const transactionResponse = await contract.getUserItemList(signer);
+      const transactionResponse = await contract.getAllItems(signer);
+
+      // Clear previous items
+      const itemsContainer = document.getElementById("itemsContainer");
+      itemsContainer.innerHTML = "";
+
       for (let i = 0; i < transactionResponse.length; i++) {
+        // Create a new container div for each set of items
+        const itemContainer = document.createElement("div");
+        itemContainer.classList.add("itemContainer"); // Add a class for styling, adjust in your CSS
+
         for (let j = 0; j < transactionResponse[i].length; j++) {
-          console.log(transactionResponse[i][j]);
+          // Create a new div for each item
+          const itemDiv = document.createElement("div");
+          itemDiv.classList.add("item"); // Add a class for styling, adjust in your CSS
+
+          // Display item information
+          itemDiv.textContent = transactionResponse[i][j];
+
+          // Append the item div to the container
+          itemContainer.appendChild(itemDiv);
         }
-        console.log("---------------------item end-----------------------");
+
+        // Append the container for each set of items
+        itemsContainer.appendChild(itemContainer);
       }
     } catch (error) {
       console.log(error);
@@ -65,20 +88,39 @@ getMyItemsBtn.addEventListener("click", async function getBalance() {
   }
 });
 
-getAllItemsBtn.addEventListener("click", async function getBalance() {
+// Inside the getMyItemsBtn event listener
+getMyItemsBtn.addEventListener("click", async function() {
   if (window.ethereum) {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
-
     const contract = new ethers.Contract(contractAddress, abi, signer);
+
     try {
-      const transactionResponse = await contract.getAllItems();
+      const transactionResponse = await contract.getMyItems(signer);
+
+      // Clear previous items
+      const myItemsContainer = document.getElementById("myItemsContainer");
+      myItemsContainer.innerHTML = "";
 
       for (let i = 0; i < transactionResponse.length; i++) {
+        // Create a new container div for each set of items
+        const myItemContainer = document.createElement("div");
+        myItemContainer.classList.add("itemContainer"); // Add a class for styling, adjust in your CSS
+
         for (let j = 0; j < transactionResponse[i].length; j++) {
-          console.log(transactionResponse[i][j]);
+          // Create a new div for each item
+          const myItemDiv = document.createElement("div");
+          myItemDiv.classList.add("item"); // Add a class for styling, adjust in your CSS
+
+          // Display item information
+          myItemDiv.textContent = transactionResponse[i][j];
+
+          // Append the item div to the container
+          myItemContainer.appendChild(myItemDiv);
         }
-        console.log("---------------------item end-----------------------");
+
+        // Append the container for each set of items
+        myItemsContainer.appendChild(myItemContainer);
       }
     } catch (error) {
       console.log(error);
@@ -86,51 +128,47 @@ getAllItemsBtn.addEventListener("click", async function getBalance() {
   }
 });
 
-buy.addEventListener("click", async function insertItem() {
-  const testName = document.getElementById("testName").value;
-  const testPublicKey = document.getElementById("testPublicKey").value;
-  const testPrice = document.getElementById("testPrice").value;
-
-  console.log("buying item name " + testName + " with price: " + testPublicKey);
-
+// Inside the getBroughtItemsBtn event listener
+getBroughtItemsBtn.addEventListener("click", async function getBoughtItems() {
   if (window.ethereum) {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     const contract = new ethers.Contract(contractAddress, abi, signer);
-    try {
-      const transactionResponse = await contract.buy(testName, testPublicKey, {
-        value: ethers.parseEther(testPrice),
-      });
-      await transactionResponse.wait(1);
 
-      await listenForTransactionMine(transactionResponse, provider);
-      console.log("Done");
-    } catch (error) {
-      console.log(error);
-    }
-  }
-});
-
-getBroughtItemsBtn.addEventListener("click", async function getBalance() {
-  if (window.ethereum) {
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
-
-    const contract = new ethers.Contract(contractAddress, abi, signer);
     try {
       const transactionResponse = await contract.getUserbroughtItems(signer);
 
+      // Clear previous bought items
+      const boughtItemsContainer = document.getElementById("boughtItemsContainer");
+      boughtItemsContainer.innerHTML = "";
+
       for (let i = 0; i < transactionResponse.length; i++) {
+        // Create a new container div for each set of bought items
+        const boughtItemContainer = document.createElement("div");
+        boughtItemContainer.classList.add("itemContainer"); // Add a class for styling, adjust in your CSS
+
         for (let j = 0; j < transactionResponse[i].length; j++) {
-          console.log(transactionResponse[i][j]);
+          // Create a new div for each bought item
+          const boughtItemDiv = document.createElement("div");
+          boughtItemDiv.classList.add("bought-item"); // Add a class for styling, adjust in your CSS
+
+          // Display bought item information
+          boughtItemDiv.textContent = transactionResponse[i][j];
+
+          // Append the bought item div to the container
+          boughtItemContainer.appendChild(boughtItemDiv);
         }
-        console.log("---------------------item end-----------------------");
+
+        // Append the container for each set of bought items
+        boughtItemsContainer.appendChild(boughtItemContainer);
       }
     } catch (error) {
       console.log(error);
     }
   }
 });
+
+
 
 function listenForTransactionMine(transactionResponse, provider) {
   console.log("------------MINING: " + transactionResponse.hash);
@@ -142,3 +180,10 @@ function listenForTransactionMine(transactionResponse, provider) {
     });
   });
 }
+
+
+
+
+
+
+
