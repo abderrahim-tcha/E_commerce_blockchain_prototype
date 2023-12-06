@@ -54,54 +54,59 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 async function getAllItems() {
   if (window.ethereum) {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, abi, signer);
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, abi, signer);
 
-      try {
-          const transactionResponse = await contract.getAllItems(signer);
+    try {
+      const transactionResponse = await contract.getAllItems(signer);
 
-          // Clear previous items
-          const itemsContainer = document.getElementById("itemsContainer");
-          itemsContainer.innerHTML = "";
+      // Clear previous items
+      const itemsContainer = document.getElementById("itemsContainer");
+      itemsContainer.innerHTML = "";
 
-          for (let i = 0; i < transactionResponse.length; i++) {
-              // Create a new container div for each set of items
-              const itemContainer = document.createElement("div");
-              itemContainer.classList.add("itemContainer");
+      for (let i = 0; i < transactionResponse.length; i++) {
+        // Create a new container div for each set of items
+        const itemContainer = document.createElement("div");
+        itemContainer.classList.add("itemContainer");
 
-              let newval = formatEther(transactionResponse[i][4]);
+        // Display public key
+        const publicKeyDiv = document.createElement("div");
+        publicKeyDiv.textContent = `Public Key: ${transactionResponse[i][0]}`;
+        itemContainer.appendChild(publicKeyDiv);
 
-              for (let j = 0; j < transactionResponse[i].length; j++) {
-                const itemDiv = document.createElement("div");
-                itemDiv.classList.add("item");
-            
-                if (j == 3) { // Assuming index 2 corresponds to itemImageUrl in your transactionResponse
-                    const imgElement = document.createElement("img");
-                    imgElement.src = transactionResponse[i][j];
-                    imgElement.alt = "Product Image"; // You can set an alt attribute for accessibility
-                    imgElement.classList.add("product-image");
-            
-                    // Append the img element to the item div
-                    itemDiv.appendChild(imgElement);
-                } else if (j === 4) {
-                    itemDiv.textContent = newval;
-                } else {
-                    itemDiv.textContent = transactionResponse[i][j];
-                }
-            
-                // Append the item div to the container
-                itemContainer.appendChild(itemDiv);
-            }
+        // Display product name
+        const productNameDiv = document.createElement("div");
+        productNameDiv.textContent = `Product Name: ${transactionResponse[i][1]}`;
+        itemContainer.appendChild(productNameDiv);
 
-              // Append the container for each set of items
-              itemsContainer.appendChild(itemContainer);
-          }
-      } catch (error) {
-          console.log(error);
+        // Display product category
+        const productCategoryDiv = document.createElement("div");
+        productCategoryDiv.textContent = `Product Category: ${transactionResponse[i][2]}`;
+        itemContainer.appendChild(productCategoryDiv);
+
+        // Display product image
+        const productImageDiv = document.createElement("div");
+        const imgElement = document.createElement("img");
+        imgElement.src = transactionResponse[i][3];
+        imgElement.classList.add("product-image");
+        productImageDiv.appendChild(imgElement);
+        itemContainer.appendChild(productImageDiv);
+
+        // Display product price
+        const productPriceDiv = document.createElement("div");
+        const priceValue = formatEther(transactionResponse[i][4]);
+        productPriceDiv.textContent = `Price: ${priceValue} ETH`;
+        itemContainer.appendChild(productPriceDiv);
+
+        // Append the container for each set of items
+        itemsContainer.appendChild(itemContainer);
       }
+    } catch (error) {
+      console.log(error);
+    }
   }
-};
+}
 
 
 
@@ -113,7 +118,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   await getMyItems();
 });
 
-// Inside the getMyItemsBtn event listener
 async function getMyItems() {
   if (window.ethereum) {
     const provider = new ethers.BrowserProvider(window.ethereum);
@@ -130,38 +134,37 @@ async function getMyItems() {
       for (let i = 0; i < transactionResponse.length; i++) {
         // Create a new container div for each set of items
         const myItemContainer = document.createElement("div");
-        myItemContainer.classList.add("itemContainer"); // Add a class for styling, adjust in your CSS
+        myItemContainer.classList.add("itemContainer");
 
-        let newval = formatEther(transactionResponse[i][4]);
+        // Display public key
+        const publicKeyDiv = document.createElement("div");
+        publicKeyDiv.textContent = `Public Key: ${transactionResponse[i][0]}`;
+        myItemContainer.appendChild(publicKeyDiv);
 
-        for (let j = 0; j < transactionResponse[i].length; j++) {
-          const itemDiv = document.createElement("div");
-          itemDiv.classList.add("item");
-      
-          if (j == 3) { // Assuming index 2 corresponds to itemImageUrl in your transactionResponse
-              const imgElement = document.createElement("img");
-              imgElement.src = transactionResponse[i][j];
-              imgElement.alt = "Product Image"; // You can set an alt attribute for accessibility
-              imgElement.classList.add("product-image");
-      
-              // Append the img element to the item div
-              itemDiv.appendChild(imgElement);}}
+        // Display product name
+        const productNameDiv = document.createElement("div");
+        productNameDiv.textContent = `Product Name: ${transactionResponse[i][1]}`;
+        myItemContainer.appendChild(productNameDiv);
 
-        for (let j = 0; j < transactionResponse[i].length; j++) {
-          // Create a new div for each item
-          const myItemDiv = document.createElement("div");
-          myItemDiv.classList.add("item"); // Add a class for styling, adjust in your CSS
+        // Display product category
+        const productCategoryDiv = document.createElement("div");
+        productCategoryDiv.textContent = `Product Category: ${transactionResponse[i][2]}`;
+        myItemContainer.appendChild(productCategoryDiv);
 
-          if (j == 4) {
-            myItemDiv.textContent = newval;
-          } else {
-            // Display item information
-            myItemDiv.textContent = transactionResponse[i][j];
-          }
+        // Display product image
+        const productImageDiv = document.createElement("div");
+        const imgElement = document.createElement("img");
+        imgElement.src = transactionResponse[i][3];
+        imgElement.alt = "Product Image";
+        imgElement.classList.add("product-image");
+        productImageDiv.appendChild(imgElement);
+        myItemContainer.appendChild(productImageDiv);
 
-          // Append the item div to the container
-          myItemContainer.appendChild(myItemDiv);
-        }
+        // Display product price
+        const productPriceDiv = document.createElement("div");
+        const priceValue = formatEther(transactionResponse[i][4]);
+        productPriceDiv.textContent = `Product Price: ${priceValue}`;
+        myItemContainer.appendChild(productPriceDiv);
 
         // Append the container for each set of items
         myItemsContainer.appendChild(myItemContainer);
@@ -171,7 +174,6 @@ async function getMyItems() {
     }
   }
 }
-
 
 
 
@@ -192,47 +194,48 @@ async function getBoughtItems() {
       const transactionResponse = await contract.getUserbroughtItems(signer);
 
       // Clear previous bought items
-      const boughtItemsContainer = document.getElementById(
-        "boughtItemsContainer"
-      );
-      boughtItemsContainer.innerHTML = "";
+      const BoughtItemsContainer = document.getElementById("boughtItemsContainer");
+      BoughtItemsContainer.innerHTML = "";
 
       for (let i = 0; i < transactionResponse.length; i++) {
         // Create a new container div for each set of bought items
-        const boughtItemContainer = document.createElement("div");
-        boughtItemContainer.classList.add("itemContainer"); // Add a class for styling, adjust in your CSS
+        const BoughtItemContainer = document.createElement("div");
+        BoughtItemContainer.classList.add("itemContainer");
 
-        for (let j = 0; j < transactionResponse[i].length; j++) {
-          // Create a new div for each bought item
-          const boughtItemDiv = document.createElement("div");
-          boughtItemDiv.classList.add("item"); // Add a class for styling, adjust in your CSS
+        // Display public key
+        const publicKeyDiv = document.createElement("div");
+        publicKeyDiv.textContent = `Public Key: ${transactionResponse[i][0]}`;
+        BoughtItemContainer.appendChild(publicKeyDiv);
 
-          for (let j = 0; j < transactionResponse[i].length; j++) {
-            const itemDiv = document.createElement("div");
-            itemDiv.classList.add("item");
-        
-            if (j == 3) { // Assuming index 2 corresponds to itemImageUrl in your transactionResponse
-                const imgElement = document.createElement("img");
-                imgElement.src = transactionResponse[i][j];
-                imgElement.alt = "Product Image"; // You can set an alt attribute for accessibility
-                imgElement.classList.add("product-image");
-        
-                // Append the img element to the item div
-                itemDiv.appendChild(imgElement);}}
+        // Display product name
+        const productNameDiv = document.createElement("div");
+        productNameDiv.textContent = `Product Name: ${transactionResponse[i][1]}`;
+        BoughtItemContainer.appendChild(productNameDiv);
 
-          if (j === 4) {
-            boughtItemDiv.textContent = "newval"; // Assuming newval is a string, replace with the correct value
-          } else {
-            // Display item information
-            boughtItemDiv.textContent = transactionResponse[i][j];
-          }
+        // Display product category
+        const productCategoryDiv = document.createElement("div");
+        productCategoryDiv.textContent = `Product Category: ${transactionResponse[i][2]}`;
+        BoughtItemContainer.appendChild(productCategoryDiv);
 
-          // Append the item div to the container
-          boughtItemContainer.appendChild(boughtItemDiv);
-        }
+        // Display product image
+        const productImageDiv = document.createElement("div");
+        const imgElement = document.createElement("img");
+        imgElement.src = transactionResponse[i][3];
+        imgElement.alt = "Product Image";
+        imgElement.classList.add("product-image");
+        productImageDiv.appendChild(imgElement);
+        BoughtItemContainer.appendChild(productImageDiv);
+
+        // Display product price
+        const productPriceDiv = document.createElement("div");
+        const priceValue = formatEther(transactionResponse[i][4]);
+        productPriceDiv.textContent = `Product Price: ${priceValue}`;
+        BoughtItemContainer.appendChild(productPriceDiv);
+
+        // Append the container for each set of items
 
         // Append the container for each set of bought items
-        boughtItemsContainer.appendChild(boughtItemContainer);
+        BoughtItemsContainer.appendChild(BoughtItemContainer);
       }
     } catch (error) {
       console.log(error);
