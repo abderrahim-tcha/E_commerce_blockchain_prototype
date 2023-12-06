@@ -1,11 +1,8 @@
-import { TransactionReceipt, ethers } from "./ether-6.7.esm.min.js";
+import { TransactionReceipt, ethers, formatEther } from "./ether-6.7.esm.min.js";
 import { abi, contractAddress } from "./constant.js";
 const connectBtn = document.getElementById("connect");
 const addItemBtn = document.getElementById("addItem");
-const getAllItemsBtn = document.getElementById("getAllItems");
-const getMyItemsBtn = document.getElementById("getMyItems");
 const buy = document.getElementById("buy");
-const getBroughtItemsBtn = document.getElementById("getBroughtItems");
 
 connectBtn.addEventListener("click", async function () {
   if (window.ethereum) {
@@ -45,48 +42,79 @@ addItemBtn.addEventListener("click", async function insertItem() {
   }
 });
 
-// Inside the getAllItemsBtn event listener
-getAllItemsBtn.addEventListener("click", async function getAllItems() {
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+  await getAllItems();
+});
+
+async function getAllItems() {
   if (window.ethereum) {
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
-    const contract = new ethers.Contract(contractAddress, abi, signer);
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(contractAddress, abi, signer);
 
-    try {
-      const transactionResponse = await contract.getAllItems(signer);
+      try {
+          const transactionResponse = await contract.getAllItems(signer);
 
-      // Clear previous items
-      const itemsContainer = document.getElementById("itemsContainer");
-      itemsContainer.innerHTML = "";
+          // Clear previous items
+          const itemsContainer = document.getElementById("itemsContainer");
+          itemsContainer.innerHTML = "";
 
-      for (let i = 0; i < transactionResponse.length; i++) {
-        // Create a new container div for each set of items
-        const itemContainer = document.createElement("div");
-        itemContainer.classList.add("itemContainer"); // Add a class for styling, adjust in your CSS
+          for (let i = 0; i < transactionResponse.length; i++) {
+              // Create a new container div for each set of items
+              const itemContainer = document.createElement("div");
+              itemContainer.classList.add("itemContainer");
 
-        for (let j = 0; j < transactionResponse[i].length; j++) {
-          // Create a new div for each item
-          const itemDiv = document.createElement("div");
-          itemDiv.classList.add("item"); // Add a class for styling, adjust in your CSS
+              let newval = formatEther(transactionResponse[i][4]);
 
-          // Display item information
-          itemDiv.textContent = transactionResponse[i][j];
+              for (let j = 0; j < transactionResponse[i].length; j++) {
+                const itemDiv = document.createElement("div");
+                itemDiv.classList.add("item");
+            
+                if (j == 3) { // Assuming index 2 corresponds to itemImageUrl in your transactionResponse
+                    const imgElement = document.createElement("img");
+                    imgElement.src = transactionResponse[i][j];
+                    imgElement.alt = "Product Image"; // You can set an alt attribute for accessibility
+                    imgElement.classList.add("product-image");
+            
+                    // Append the img element to the item div
+                    itemDiv.appendChild(imgElement);
+                } else if (j === 4) {
+                    itemDiv.textContent = newval;
+                } else {
+                    itemDiv.textContent = transactionResponse[i][j];
+                }
+            
+                // Append the item div to the container
+                itemContainer.appendChild(itemDiv);
+            }
 
-          // Append the item div to the container
-          itemContainer.appendChild(itemDiv);
-        }
-
-        // Append the container for each set of items
-        itemsContainer.appendChild(itemContainer);
+              // Append the container for each set of items
+              itemsContainer.appendChild(itemContainer);
+          }
+      } catch (error) {
+          console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
   }
+};
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+  await getMyItems();
 });
 
 // Inside the getMyItemsBtn event listener
-getMyItemsBtn.addEventListener("click", async function () {
+async function getMyItems() {
   if (window.ethereum) {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -104,13 +132,32 @@ getMyItemsBtn.addEventListener("click", async function () {
         const myItemContainer = document.createElement("div");
         myItemContainer.classList.add("itemContainer"); // Add a class for styling, adjust in your CSS
 
+        let newval = formatEther(transactionResponse[i][4]);
+
+        for (let j = 0; j < transactionResponse[i].length; j++) {
+          const itemDiv = document.createElement("div");
+          itemDiv.classList.add("item");
+      
+          if (j == 3) { // Assuming index 2 corresponds to itemImageUrl in your transactionResponse
+              const imgElement = document.createElement("img");
+              imgElement.src = transactionResponse[i][j];
+              imgElement.alt = "Product Image"; // You can set an alt attribute for accessibility
+              imgElement.classList.add("product-image");
+      
+              // Append the img element to the item div
+              itemDiv.appendChild(imgElement);}}
+
         for (let j = 0; j < transactionResponse[i].length; j++) {
           // Create a new div for each item
           const myItemDiv = document.createElement("div");
           myItemDiv.classList.add("item"); // Add a class for styling, adjust in your CSS
 
-          // Display item information
-          myItemDiv.textContent = transactionResponse[i][j];
+          if (j == 4) {
+            myItemDiv.textContent = newval;
+          } else {
+            // Display item information
+            myItemDiv.textContent = transactionResponse[i][j];
+          }
 
           // Append the item div to the container
           myItemContainer.appendChild(myItemDiv);
@@ -123,10 +170,19 @@ getMyItemsBtn.addEventListener("click", async function () {
       console.log(error);
     }
   }
+}
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+  await getBoughtItems();
 });
 
-// Inside the getBroughtItemsBtn event listener
-getBroughtItemsBtn.addEventListener("click", async function getBoughtItems() {
+async function getBoughtItems() {
   if (window.ethereum) {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -149,12 +205,29 @@ getBroughtItemsBtn.addEventListener("click", async function getBoughtItems() {
         for (let j = 0; j < transactionResponse[i].length; j++) {
           // Create a new div for each bought item
           const boughtItemDiv = document.createElement("div");
-          boughtItemDiv.classList.add("bought-item"); // Add a class for styling, adjust in your CSS
+          boughtItemDiv.classList.add("item"); // Add a class for styling, adjust in your CSS
 
-          // Display bought item information
-          boughtItemDiv.textContent = transactionResponse[i][j];
+          for (let j = 0; j < transactionResponse[i].length; j++) {
+            const itemDiv = document.createElement("div");
+            itemDiv.classList.add("item");
+        
+            if (j == 3) { // Assuming index 2 corresponds to itemImageUrl in your transactionResponse
+                const imgElement = document.createElement("img");
+                imgElement.src = transactionResponse[i][j];
+                imgElement.alt = "Product Image"; // You can set an alt attribute for accessibility
+                imgElement.classList.add("product-image");
+        
+                // Append the img element to the item div
+                itemDiv.appendChild(imgElement);}}
 
-          // Append the bought item div to the container
+          if (j === 4) {
+            boughtItemDiv.textContent = "newval"; // Assuming newval is a string, replace with the correct value
+          } else {
+            // Display item information
+            boughtItemDiv.textContent = transactionResponse[i][j];
+          }
+
+          // Append the item div to the container
           boughtItemContainer.appendChild(boughtItemDiv);
         }
 
@@ -165,7 +238,13 @@ getBroughtItemsBtn.addEventListener("click", async function getBoughtItems() {
       console.log(error);
     }
   }
-});
+}
+
+
+
+
+
+
 
 buy.addEventListener("click", async function insertItem() {
   const testName = document.getElementById("testName").value;

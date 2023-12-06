@@ -5,38 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="/Font End/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet"/>
   </head>
   <body>
-    <header>
-      <button id="connect" >Connect</button>
-      <button id="getAllItems">get All Items</button>
-      <button id="getMyItems">get my items</button>
-      <button id="getBroughtItems">get brought Items</button>
+    <header class="header">
+      <nav>
+        <div class="nav__bar">
+          <div class="nav__header">
+            <div class="nav__logo">
+              <a href="#"><div class="image"><img src="/Font End/images and icons/online-shopping_2888681.png" alt=""></div></a>
+            </div>
+            <div class="nav__menu__btn" id="menu-btn">
+              <span><i class="ri-menu-line"></i><span>
+            </div>
+          </div>
+          <ul class="nav__links" id="nav-links">
+            <li class="link"><a href="index.html">Home</a></li>
+            <li class="link"><a href="my_items.html">My Items</a></li>
+            <li class="link"><a href="bought_items.html">Bought Items</a></li>
+            <li class="link"><button class="btn" id="connect">Connect</button></li>
+          </ul>
+        </div>
+      </nav>
     </header>
     
-    <section>
-      <button id="addItem">addItem</button>
-    <input type="text" id="itemName" placeholder="item name" />
-    <input type="text" id="itemCategory" placeholder="category" />
-    <input type="text" id="itemImageUrl" placeholder="image url" />
-    <input type="text" id="itemPrice" placeholder="price" />
+    <div class="container">
+      <div class="none" style="display: none;">
+        <button id="getAllItems">get All Items</button>
+        <button id="getMyItems">get my items</button>
+        <button id="getBroughtItems">get brought Items</button>
 
-    <br />
-    <br />
-    <button id="buy">buy this item</button>
-    <input type="text" id="testName" placeholder="name" />
-    <input type="text" id="testPublicKey" placeholder="address" />
-    <input type="text" id="testPrice" placeholder="testPrice" />
+        <h2>Your Items</h2>
+        <div id="userItemsContainer"></div>
 
-    <!-- Add this div to your body where you want to display items -->
-    <div id="itemsContainer"></div>
+        <h2>Bought Items</h2>
+        <div id="boughtItemsContainer"></div>
+      </div>
 
-    <div id="userItemsContainer"></div>
+      <h2 class="section_title">All Items</h2>
+      <div id="itemsContainer"></div>
+    </div>
 
-    <div id="boughtItemsContainer"></div>
-    </section>
+    <button id="addItem">addItem</button>
+      <input type="text" id="itemName" placeholder="item name" />
+      <input type="text" id="itemCategory" placeholder="category" />
+      <input type="text" id="itemImageUrl" placeholder="image url" />
+      <input type="text" id="itemPrice" placeholder="price" />
+
+      <br />
+      <br />
+      <button id="buy">buy this item</button>
+      <input type="text" id="testName" placeholder="name" />
+      <input type="text" id="testPublicKey" placeholder="address" />
+      <input type="text" id="testPrice" placeholder="testPrice" />
     
 
   </body>
   <script src="main.js" type="module"></script>
+
+  <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const navLinks = document.getElementById("nav-links");
+    const menuBtnIcon = menuBtn.querySelector("i");
+  
+    menuBtn.addEventListener("click", (e) => {
+      navLinks.classList.toggle("open");
+  
+      const isOpen = navLinks.classList.contains("open");
+      menuBtnIcon.setAttribute(
+        "class",
+        isOpen ? "ri-close-line" : "ri-menu-line"
+      );
+    });
+  
+    navLinks.addEventListener("click", (e) => {
+      navLinks.classList.remove("open");
+      menuBtnIcon.setAttribute("class", "ri-menu-line");
+    });
+  
+  
+  </script>
 </html>
