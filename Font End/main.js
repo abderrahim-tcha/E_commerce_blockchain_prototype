@@ -163,7 +163,7 @@ async function getMyItems() {
         // Display product price
         const productPriceDiv = document.createElement("div");
         const priceValue = formatEther(transactionResponse[i][4]);
-        productPriceDiv.textContent = `Product Price: ${priceValue}`;
+        productPriceDiv.textContent = `Product Price: ${priceValue} ETH`;
         myItemContainer.appendChild(productPriceDiv);
 
         // Append the container for each set of items
@@ -229,7 +229,7 @@ async function getBoughtItems() {
         // Display product price
         const productPriceDiv = document.createElement("div");
         const priceValue = formatEther(transactionResponse[i][4]);
-        productPriceDiv.textContent = `Product Price: ${priceValue}`;
+        productPriceDiv.textContent = `Product Price: ${priceValue} ETH`;
         BoughtItemContainer.appendChild(productPriceDiv);
 
         // Append the container for each set of items
