@@ -20,7 +20,7 @@
             </div>
           </div>
           <ul class="nav__links" id="nav-links">
-            <li class="link"><a href="index.html" style="color: #683ce4;">Home</a></li>
+            <li class="link"><a href="index.html" style="color: #64FDDA ;">Home</a></li>
             <li class="link"><a href="my_items.html">My Items</a></li>
             <li class="link"><a href="bought_items.html">Bought Items</a></li>
             <li class="link"><button class="btn" id="connect">Connect</button></li>
@@ -43,16 +43,24 @@
         <div id="boughtItemsContainer"></div>
       </div>
 
-      <h2 class="section_title">All Items</h2>
-      <div id="itemsContainer"></div>
+      <div class="add">
+        <h2 class="section_title">add item</h2>
+        <input type="text" id="itemName" placeholder="item name" />
+        <input type="text" id="itemCategory" placeholder="category" />
+        <input type="text" id="itemImageUrl" placeholder="image url" />
+        <input type="text" id="itemStock" placeholder="item Stock" />
+        <input type="text" id="itemPrice" placeholder="price" />
+        <button class="btn" id="addItem">addItem</button>
+      </div>
+      <div class="all">
+        <h2 class="section_title">All Items</h2>
+        <div id="itemsContainer"></div>
+      </div>
+      
+      
     </div>
-
-    <button id="addItem">addItem</button>
-      <input type="text" id="itemName" placeholder="item name" />
-      <input type="text" id="itemCategory" placeholder="category" />
-      <input type="text" id="itemImageUrl" placeholder="image url" />
-      <input type="text" id="itemStock" placeholder="item Stock" />
-      <input type="text" id="itemPrice" placeholder="price" />
+    
+      
 
       <br />
       <br />

@@ -292,7 +292,6 @@ buy.addEventListener("click", async function insertItem() {
 
 
 getSoldItem.addEventListener("click", async function getBalance() {
-  console.log("9ochi7a") ;
   if (window.ethereum) {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -311,7 +310,10 @@ getSoldItem.addEventListener("click", async function getBalance() {
       console.log(error);
     }
   }
-});
+}); 
+
+
+
 
 
 
