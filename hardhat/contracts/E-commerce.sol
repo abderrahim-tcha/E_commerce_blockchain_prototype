@@ -92,9 +92,16 @@ contract E_commerce {
         );
         require(callSeccess, "Call Failed");
         items[name].stock -= 1;
+
         for (uint256 i = 0; i < allItems.length; i++) {
             if (keccak256(bytes(allItems[i].name)) == keccak256(bytes(name))) {
                 allItems[i].stock -= 1;
+                if (allItems[i].stock == 0) {
+                    for (uint256 j = i; j < allItems.length - 1; j++) {
+                        allItems[j] = allItems[j + 1];
+                    }
+                    allItems.pop();
+                }
             }
         }
 
@@ -104,6 +111,18 @@ contract E_commerce {
                 keccak256(bytes(name))
             ) {
                 userItems[reciverAdress][i].stock -= 1;
+                if (userItems[reciverAdress][i].stock == 0) {
+                    for (
+                        uint256 j = i;
+                        j < userItems[reciverAdress].length - 1;
+                        j++
+                    ) {
+                        userItems[reciverAdress][j] = userItems[reciverAdress][
+                            j + 1
+                        ];
+                    }
+                    userItems[reciverAdress].pop();
+                }
             }
         }
 
@@ -119,5 +138,9 @@ contract E_commerce {
 
         soldItems[reciverAdress].push(newItem);
         broughtItems[msg.sender].push(items[name]);
+
+        if (items[name].stock == 0) {
+            delete items[name];
+        }
     }
 }
