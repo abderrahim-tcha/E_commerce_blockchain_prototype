@@ -217,6 +217,27 @@ input {
 }
 
 
+.buy_btn{
+  cursor: pointer;
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  margin: 16px 0;
+  padding: 8px 1rem;
+  border-radius: 10px;
+  border: 4px solid transparent;
+  transition: .5s;
+}
+
+.itemContainer{
+  text-align: center;
+}
+
+.buy_btn:hover {
+  background-color: var(--background-color);
+  color: var(--primary-color);
+  border: 4px solid var(--primary-color);
+}
+
 
 
 /*resposive*/

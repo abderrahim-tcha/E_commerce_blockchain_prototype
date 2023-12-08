@@ -73,34 +73,44 @@ async function getAllItems() {
         const itemContainer = document.createElement("div");
         itemContainer.classList.add("itemContainer");
 
-        // Display public key
+        //Display public key
         const publicKeyDiv = document.createElement("div");
         publicKeyDiv.textContent = `Public Key: ${transactionResponse[i][0]}`;
         itemContainer.appendChild(publicKeyDiv);
+        publicKeyDiv.style.background="#64FDDA ";
+        publicKeyDiv.style.color="#161617";
+        publicKeyDiv.style.margin= "10px 0";
+        publicKeyDiv.style.padding= "5px";
+        publicKeyDiv.style.borderRadius= "15px";
 
         // Display product name
         const productNameDiv = document.createElement("div");
-        productNameDiv.textContent = `Product Name: ${transactionResponse[i][1]}`;
+        const paragraphe= document.createElement("p");
+        paragraphe.textContent = `product name: ${transactionResponse[i][1]}`;
+        productNameDiv.classList.add("info") 
+        productNameDiv.appendChild(paragraphe);
         itemContainer.appendChild(productNameDiv);
 
         // Display product category
         const productCategoryDiv = document.createElement("div");
-        productCategoryDiv.textContent = `Product Category: ${transactionResponse[i][2]}`;
-        itemContainer.appendChild(productCategoryDiv);
+        productCategoryDiv.textContent = `product Category: ${transactionResponse[i][2]}`;
+        productNameDiv.appendChild(productCategoryDiv);
 
         // Display product image
         const productImageDiv = document.createElement("div");
         const imgElement = document.createElement("img");
         imgElement.src = transactionResponse[i][3];
         imgElement.classList.add("product-image");
+        productImageDiv.classList.add("cadre")
         productImageDiv.appendChild(imgElement);
         itemContainer.appendChild(productImageDiv);
 
+
+
         // Display product stock
         const productstockDiv = document.createElement("div");
-        productstockDiv.textContent = `Product stock: ${transactionResponse[i][4]}`;
+        productstockDiv.textContent = `Stock: ${transactionResponse[i][4]}`;
         itemContainer.appendChild(productstockDiv);
-
 
         // Display product price
         const productPriceDiv = document.createElement("div");
@@ -108,18 +118,38 @@ async function getAllItems() {
         productPriceDiv.textContent = `Price: ${priceValue} ETH`;
         itemContainer.appendChild(productPriceDiv);
 
-        
+        // Create buy button 
+        const buyButton = document.createElement("div");
+        buyButton.textContent = "Buy now";
+        buyButton.classList.add("buy_btn")
+        buyButton.addEventListener("click", async () => {
+          // Call the buy function with the appropriate item details
+          const testName = transactionResponse[i][1];
+          const testPublicKey = transactionResponse[i][0];
+          const testPrice = priceValue;
+          try {
+            const transactionResponse = await contract.buy(testName, testPublicKey, {
+              value: ethers.parseEther(testPrice),
+            });
+            await transactionResponse.wait(1);
+
+            await listenForTransactionMine(transactionResponse, provider);
+            console.log("Done");
+          } catch (error) {
+            console.log(error);
+          }
+        });
 
         // Append the container for each set of items
+        itemContainer.appendChild(buyButton);
         itemsContainer.appendChild(itemContainer);
-
-        
       }
     } catch (error) {
       console.log(error);
     }
   }
 }
+
 
 
 
@@ -153,6 +183,11 @@ async function getMyItems() {
         const publicKeyDiv = document.createElement("div");
         publicKeyDiv.textContent = `Public Key: ${transactionResponse[i][0]}`;
         myItemContainer.appendChild(publicKeyDiv);
+        publicKeyDiv.style.background="#64FDDA ";
+        publicKeyDiv.style.color="#161617";
+        publicKeyDiv.style.margin= "10px 0";
+        publicKeyDiv.style.padding= "5px";
+        publicKeyDiv.style.borderRadius= "15px";
 
         // Display product name
         const productNameDiv = document.createElement("div");
@@ -219,6 +254,11 @@ async function getBoughtItems() {
         const publicKeyDiv = document.createElement("div");
         publicKeyDiv.textContent = `Public Key: ${transactionResponse[i][0]}`;
         BoughtItemContainer.appendChild(publicKeyDiv);
+        publicKeyDiv.style.background="#64FDDA ";
+        publicKeyDiv.style.color="#161617";
+        publicKeyDiv.style.margin= "10px 0";
+        publicKeyDiv.style.padding= "5px";
+        publicKeyDiv.style.borderRadius= "15px";
 
         // Display product name
         const productNameDiv = document.createElement("div");
@@ -341,6 +381,11 @@ async function getSoldItem() {
         const publicKeyDiv = document.createElement("div");
         publicKeyDiv.textContent = `buyer: ${transactionResponse[i][0]}`;
         soldItemContainer.appendChild(publicKeyDiv);
+        publicKeyDiv.style.background="#64FDDA ";
+        publicKeyDiv.style.color="#161617";
+        publicKeyDiv.style.margin= "10px 0";
+        publicKeyDiv.style.padding= "5px";
+        publicKeyDiv.style.borderRadius= "15px";
 
 
 
