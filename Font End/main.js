@@ -3,7 +3,7 @@ import { abi, contractAddress } from "./constant.js";
 const connectBtn = document.getElementById("connect");
 const addItemBtn = document.getElementById("addItem");
 const buy = document.getElementById("buy");
-const getSoldItem = document.getElementById("getSoldItem");
+/* const getSoldItem = document.getElementById("getSoldItem"); */
 
 connectBtn.addEventListener("click", async function () {
   if (window.ethereum) {
@@ -291,7 +291,7 @@ buy.addEventListener("click", async function insertItem() {
 
 
 
-getSoldItem.addEventListener("click", async function getBalance() {
+/* getSoldItem.addEventListener("click", async function getBalance() {
   if (window.ethereum) {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -311,6 +311,76 @@ getSoldItem.addEventListener("click", async function getBalance() {
     }
   }
 }); 
+ */
+
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+  await getSoldItem();
+});
+
+async function getSoldItem() {
+  if (window.ethereum) {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+
+    try {
+      const transactionResponse = await contract.getSoldItems(signer);
+
+      // Clear previous bought items
+      const soldItemsContainer = document.getElementById("soldItemsContainer");
+      soldItemsContainer.innerHTML = "";
+
+      for (let i = 0; i < transactionResponse.length; i++) {
+        // Create a new container div for each set of bought items
+        const soldItemContainer = document.createElement("div");
+        soldItemContainer.classList.add("itemContainer");
+
+        // Display public key
+        const publicKeyDiv = document.createElement("div");
+        publicKeyDiv.textContent = `buyer: ${transactionResponse[i][0]}`;
+        soldItemContainer.appendChild(publicKeyDiv);
+
+
+
+        // Display product name
+        const productNameDiv = document.createElement("div");
+        productNameDiv.textContent = `Product Name: ${transactionResponse[i][2]}`;
+        soldItemContainer.appendChild(productNameDiv);
+
+        // Display product category
+        const productCategoryDiv = document.createElement("div");
+        productCategoryDiv.textContent = `Product Category: ${transactionResponse[i][3]}`;
+        soldItemContainer.appendChild(productCategoryDiv);
+
+        // Display product image
+        const productImageDiv = document.createElement("div");
+        const imgElement = document.createElement("img");
+        imgElement.src = transactionResponse[i][4];
+        imgElement.alt = "Product Image";
+        imgElement.classList.add("product-image");
+        productImageDiv.appendChild(imgElement);
+        soldItemContainer.appendChild(productImageDiv);
+
+
+        // Display product price
+        const productPriceDiv = document.createElement("div");
+        const priceValue = formatEther(transactionResponse[i][6]);
+        productPriceDiv.textContent = `Product Price: ${priceValue} ETH`;
+        soldItemContainer.appendChild(productPriceDiv);
+
+        // Append the container for each set of items
+
+        // Append the container for each set of bought items
+        soldItemsContainer.appendChild(soldItemContainer);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
 
 
 
