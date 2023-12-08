@@ -3,6 +3,7 @@ import { abi, contractAddress } from "./constant.js";
 const connectBtn = document.getElementById("connect");
 const addItemBtn = document.getElementById("addItem");
 const buy = document.getElementById("buy");
+const getSoldItem = document.getElementById("getSoldItem");
 
 connectBtn.addEventListener("click", async function () {
   if (window.ethereum) {
@@ -17,6 +18,7 @@ addItemBtn.addEventListener("click", async function insertItem() {
   const itemName = document.getElementById("itemName").value;
   const itemCategory = document.getElementById("itemCategory").value;
   const itemImageUrl = document.getElementById("itemImageUrl").value;
+  const itemStock = document.getElementById("itemStock").value;
   const itemPrice = document.getElementById("itemPrice").value;
 
   console.log("item name " + itemName + " with price: " + itemPrice);
@@ -30,8 +32,9 @@ addItemBtn.addEventListener("click", async function insertItem() {
         itemName,
         itemCategory,
         itemImageUrl,
+        itemStock,
         ethers.parseEther(itemPrice)
-      );
+      );;
       await transactionResponse.wait(1);
 
       await listenForTransactionMine(transactionResponse, provider);
@@ -93,14 +96,24 @@ async function getAllItems() {
         productImageDiv.appendChild(imgElement);
         itemContainer.appendChild(productImageDiv);
 
+        // Display product stock
+        const productstockDiv = document.createElement("div");
+        productstockDiv.textContent = `Product stock: ${transactionResponse[i][4]}`;
+        itemContainer.appendChild(productstockDiv);
+
+
         // Display product price
         const productPriceDiv = document.createElement("div");
-        const priceValue = formatEther(transactionResponse[i][4]);
+        const priceValue = formatEther(transactionResponse[i][5]);
         productPriceDiv.textContent = `Price: ${priceValue} ETH`;
         itemContainer.appendChild(productPriceDiv);
 
+        
+
         // Append the container for each set of items
         itemsContainer.appendChild(itemContainer);
+
+        
       }
     } catch (error) {
       console.log(error);
@@ -162,7 +175,7 @@ async function getMyItems() {
 
         // Display product price
         const productPriceDiv = document.createElement("div");
-        const priceValue = formatEther(transactionResponse[i][4]);
+        const priceValue = formatEther(transactionResponse[i][5]);
         productPriceDiv.textContent = `Product Price: ${priceValue} ETH`;
         myItemContainer.appendChild(productPriceDiv);
 
@@ -226,9 +239,10 @@ async function getBoughtItems() {
         productImageDiv.appendChild(imgElement);
         BoughtItemContainer.appendChild(productImageDiv);
 
+
         // Display product price
         const productPriceDiv = document.createElement("div");
-        const priceValue = formatEther(transactionResponse[i][4]);
+        const priceValue = formatEther(transactionResponse[i][5]);
         productPriceDiv.textContent = `Product Price: ${priceValue} ETH`;
         BoughtItemContainer.appendChild(productPriceDiv);
 
@@ -273,6 +287,34 @@ buy.addEventListener("click", async function insertItem() {
     }
   }
 });
+
+
+
+
+getSoldItem.addEventListener("click", async function getBalance() {
+  console.log("9ochi7a") ;
+  if (window.ethereum) {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    try {
+      const transactionResponse = await contract.getSoldItems();
+
+      for (let i = 0; i < transactionResponse.length; i++) {
+        for (let j = 0; j < transactionResponse[i].length; j++) {
+          console.log(transactionResponse[i][j]);
+        }
+        console.log("---------------------item end-----------------------");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
+
+
+
 
 
 function listenForTransactionMine(transactionResponse, provider) {
