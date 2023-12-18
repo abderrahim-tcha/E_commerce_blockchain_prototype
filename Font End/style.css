@@ -14,6 +14,14 @@ body {
   box-sizing: border-box;
 
 }
+svg{
+  width: 200px;
+  margin: auto;
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+
+}
 
 :root {
     --primary-color:#64FDDA ;

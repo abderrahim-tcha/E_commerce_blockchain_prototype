@@ -13,7 +13,7 @@
         <div class="nav__bar">
           <div class="nav__header">
             <div class="nav__logo">
-              <a href="#"><div class="image"><img src="/Font End/images and icons/online-shopping_2888681.png" alt=""></div></a>
+              <div id="meta" class="image"></div>
             </div>
             <div class="nav__menu__btn" id="menu-btn">
               <span><i class="ri-menu-line"></i><span>
@@ -29,7 +29,6 @@
         </div>
       </nav>
     </header> 
-    
     <div class="container">
       <div class="none" style="display: none;">
         <button id="connect">Connect</button>
@@ -60,6 +59,7 @@
         <div id="itemsContainer"></div>
       </div>
 
+      
       <div class="all">
         <h2 class="section_title">my Items</h2>
         <div id="userItemsContainer"></div>
@@ -69,6 +69,7 @@
     </div>
   </body>
   <script src="main.js" type="module"></script>
+  <script src="meta.js" type="module"></script>
   <script>
     const menuBtn = document.getElementById("menu-btn");
     const navLinks = document.getElementById("nav-links");

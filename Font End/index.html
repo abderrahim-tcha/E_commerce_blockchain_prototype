@@ -13,12 +13,13 @@
         <div class="nav__bar">
           <div class="nav__header">
             <div class="nav__logo">
-              <a href="#"><div class="image"><img src="/Font End/images and icons/online-shopping_2888681.png" alt=""></div></a>
+              <div id="meta" class="image"></div>
             </div>
             <div class="nav__menu__btn" id="menu-btn">
               <span><i class="ri-menu-line"></i><span>
             </div>
           </div>
+          
           <ul class="nav__links" id="nav-links">
             <li class="link"><a href="index.html" style="color: #64FDDA ;">Home</a></li>
             <li class="link"><a href="my_items.html">My Items</a></li>
@@ -29,7 +30,8 @@
         </div>
       </nav>
     </header>
-    
+
+
     <div class="container">
       <div class="none" style="display: none;">
         <button id="getAllItems">get All Items</button>
@@ -70,14 +72,13 @@
         <h2 class="section_title">All Items</h2>
         <div id="itemsContainer"></div>
       </div>
-      
-      
     </div>
     
-     
-
+    
   </body>
   <script src="main.js" type="module"></script>
+  <script src="meta.js" type="module"></script>
+ 
 
   <script>
     const menuBtn = document.getElementById("menu-btn");
